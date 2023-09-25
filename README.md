@@ -1,4 +1,4 @@
-[README](README.md) | [Chinese Documentation](README_zh-CN.md)
+[README](README.md) | [中文文档](README_zh-CN.md)
 
 # Pixiu-Fontkit
 
