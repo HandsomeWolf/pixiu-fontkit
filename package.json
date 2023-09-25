@@ -23,7 +23,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/HandsomeWolf/eslint-config"
+    "url": "git+https://github.com/HandsomeWolf/pixiu-fontkit"
   },
   "devDependencies": {
     "@handsomewolf/eslint-config": "^0.2.1"
