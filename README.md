@@ -9,7 +9,7 @@ Pixiu-Fontkit is a tool for converting ttf fonts into woff and woff2 formats for
 Install with npm:
 
 ```bash
-npm install pixiu-fontkit
+npm install -g pixiu-fontkit
 ```
 
 ## Usage

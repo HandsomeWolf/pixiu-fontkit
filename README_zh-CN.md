@@ -9,7 +9,7 @@ Pixiu-Fontkit 是一个用于将 ttf 字体转换为 web 上使用的 woff 和 w
 使用 npm 安装：
 
 ```bash
-npm install pixiu-fontkit
+npm install -g pixiu-fontkit
 ```
 
 ## 使用
