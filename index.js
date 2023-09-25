@@ -4,6 +4,10 @@ const fs = require("fs");
 const path = require("path");
 const ttf2woff = require("ttf2woff");
 const ttf2woff2 = require("ttf2woff2");
+const fontCarrier = require("font-carrier");
+
+// 获取命令行参数
+let text = process.argv[2];
 
 // 指定的目录
 let dir = "./fonts";
@@ -26,6 +30,22 @@ ttfFiles.forEach((file) => {
 
   readStream.on("end", async () => {
     let ttf = Buffer.concat(data);
+
+    // 如果指定了文字，创建一个只包含这些文字的字体
+    if (text) {
+      let originalFont = fontCarrier.transfer(ttf);
+      let newFont = fontCarrier.create();
+
+      for (let char of text) {
+        let glyph = originalFont.getGlyph(char);
+        if (glyph) {
+          newFont.setGlyph(char, glyph);
+        }
+      }
+
+      ttf = Buffer.from(newFont.output().ttf);
+    }
+
     let woff = ttf2woff(ttf);
     let woff2 = ttf2woff2(ttf);
 
@@ -49,13 +69,19 @@ ttfFiles.forEach((file) => {
 
     // 创建CSS文件
     let cssContent = `
-    @font-face {
-        font-family: '${file.replace(".ttf", "")}';
-        src: url('./${file.replace(".ttf", ".woff2")}') format('woff2'),
-             url('./${file.replace(".ttf", ".woff")}') format('woff');
-        font-weight: normal;
-        font-style: normal;
-    }`;
+@font-face {
+    font-family: '${file.replace(".ttf", "")}';
+    src: url('./${file.replace(
+      ".ttf",
+      ".woff2"
+    )}?v=${Date.now()}') format('woff2'),
+         url('./${file.replace(
+           ".ttf",
+           ".woff"
+         )}?v=${Date.now()}') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}`;
 
     await fs.promises.writeFile(
       path.join(outputDir, file.replace(".ttf", ".css")),
@@ -64,23 +90,27 @@ ttfFiles.forEach((file) => {
 
     // 创建HTML demo文件
     let htmlContent = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <link rel="stylesheet" href="./${file.replace(".ttf", ".css")}">
-    </head>
-    <body>
-        <p style="font-family: '${file.replace(
-          ".ttf",
-          ""
-        )}';">Hello, this is a demo!</p>
-    </body>
-    </html>
-    `;
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="./${file.replace(
+      ".ttf",
+      ".css"
+    )}?v=${Date.now()}">
+</head>
+<body>
+    <p style="font-family: '${file.replace(".ttf", "")}';">${
+      text !== undefined ? text : "Hello, this is a demo! 你好， 这是演示文字"
+    }</p>
+`;
 
-    await fs.promises.writeFile(
-      path.join(outputDir, file.replace(".ttf", ".html")),
-      htmlContent
-    );
+    await fs.promises
+      .writeFile(
+        path.join(outputDir, file.replace(".ttf", ".html")),
+        htmlContent
+      )
+      .then(() => {
+        console.log("Completed successfully!");
+      });
   });
 });
