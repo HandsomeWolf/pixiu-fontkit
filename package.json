@@ -29,6 +29,7 @@
     "@handsomewolf/eslint-config": "^0.2.1"
   },
   "dependencies": {
+    "font-carrier": "^0.3.1",
     "progress": "^2.0.3",
     "ttf2woff": "^3.0.0",
     "ttf2woff2": "^5.0.0"
