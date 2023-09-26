@@ -1,7 +1,7 @@
 [README](README.md) | [中文文档](README_zh-CN.md)
 
 <!-- markdownlint-disable-next-line no-inline-html -->
-<img src="./pic/pixiu.png" width="180" align="right">
+<img src="https://user-images.githubusercontent.com/27292774/270527737-a6986457-21de-41f6-8874-7bf70f404fec.png" width="180" align="right">
 # Pixiu-Fontkit
 
 Pixiu-Fontkit 是一个用于将 ttf 字体转换为 web 上使用的 woff 和 woff2 格式的工具。
