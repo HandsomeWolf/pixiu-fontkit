@@ -1,4 +1,7 @@
 {
   "root": true,
-  "extends": ["./index.js"]
+  "extends": ["@handsomewolf/eslint-config"],
+  "rules": {
+    "no-console": "off"
+  }
 }
