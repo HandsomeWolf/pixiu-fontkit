@@ -1,6 +1,6 @@
 {
   "name": "pixiu-fontkit",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Convert ttf font to woff and woff2 for use on the web",
   "keywords": [
     "font-face",
