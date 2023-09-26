@@ -5,7 +5,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const ttf2woff = require("ttf2woff");
 const ttf2woff2 = require("ttf2woff2");
-const fontCarrier = require("font-carrier");
+const opentype = require("opentype.js");
 
 // 获取命令行参数
 const text = process.argv[2];
@@ -32,19 +32,26 @@ for (const file of ttfFiles) {
   readStream.on("end", async () => {
     let ttf = Buffer.concat(data);
 
+    const font = opentype.loadSync(path.join(directory, file));
     // 如果指定了文字，创建一个只包含这些文字的字体
     if (text) {
-      const originalFont = fontCarrier.transfer(ttf);
-      const newFont = fontCarrier.create();
+      const glyphs = [...text].map((char) => {
+        const glyph = font.charToGlyph(char);
+        return glyph;
+      });
 
-      for (const char of text) {
-        const glyph = originalFont.getGlyph(char);
-        if (glyph) {
-          newFont.setGlyph(char, glyph);
-        }
-      }
+      glyphs.unshift(font.glyphs.get(0)); // 添加.notdef（undefined character）字形
 
-      ttf = Buffer.from(newFont.output().ttf);
+      const newFont = new opentype.Font({
+        familyName: "NewFont",
+        styleName: "Medium",
+        unitsPerEm: font.unitsPerEm,
+        ascender: font.ascender,
+        descender: font.descender,
+        glyphs,
+      });
+
+      ttf = Buffer.from(newFont.toArrayBuffer());
     }
 
     const woff = ttf2woff(ttf);
